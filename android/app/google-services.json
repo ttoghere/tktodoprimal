@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "708167307614",
+    "project_id": "todolistonline-f6090",
+    "storage_bucket": "todolistonline-f6090.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708167307614:android:468a03d9331b054ee3ffcf",
+        "android_client_info": {
+          "package_name": "site.tunckankilic.tktodoprimal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "708167307614-i1kjavd8bqi8f1lqiq12boesp05hldac.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAA8I5KQe1_Q_2L6hOnxB8Bt2W-92xFdgc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "708167307614-i1kjavd8bqi8f1lqiq12boesp05hldac.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "708167307614-hqu3u5gjhpjqoj0kj4q5j6q021rfok9m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tktodoprimal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
