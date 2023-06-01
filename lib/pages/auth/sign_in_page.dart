@@ -47,7 +47,7 @@ class LoginBody extends StatelessWidget {
               ActionButtons(
                 type: false,
               ),
-              MultipleUserForm(type: false)
+              MultipleUserForm(type: false),
             ],
           ),
         ),
@@ -56,13 +56,18 @@ class LoginBody extends StatelessWidget {
   }
 }
 
-class ActionButtons extends StatelessWidget {
+class ActionButtons extends StatefulWidget {
   final bool type;
   const ActionButtons({
     Key? key,
     required this.type,
   }) : super(key: key);
 
+  @override
+  State<ActionButtons> createState() => _ActionButtonsState();
+}
+
+class _ActionButtonsState extends State<ActionButtons> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -86,13 +91,7 @@ class ActionButtons extends StatelessWidget {
         const SizedBox(
           height: 10,
         ),
-        Text(
-          "Or...",
-          style: Theme.of(context)
-              .textTheme
-              .titleSmall!
-              .copyWith(color: Colors.white, fontSize: 18),
-        ),
+       
       ],
     );
   }

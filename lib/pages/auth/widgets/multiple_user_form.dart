@@ -1,6 +1,10 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:tktodoprimal/pages/auth/sign_in_page.dart';
+import 'package:tktodoprimal/pages/auth/sign_up_page.dart';
+import 'package:tktodoprimal/pages/home/home_page.dart';
 import 'package:tktodoprimal/repositories/auth/auth_repository.dart';
 
 class MultipleUserForm extends StatefulWidget {
@@ -65,98 +69,180 @@ class _MultipleUserFormState extends State<MultipleUserForm> {
     super.dispose();
   }
 
+  AuthRepository authRepository = AuthRepository();
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _emailController,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-              ),
-              decoration: const InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white)),
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white)),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white)),
-                labelText: "Enter your Email",
-                labelStyle: TextStyle(color: Colors.white),
-              ),
-              keyboardType: TextInputType.emailAddress,
-              validator: validateEmail,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: TextFormField(
-              obscureText: true,
-              controller: _passwordController,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
-              ),
-              decoration: const InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white)),
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white)),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white)),
-                labelText: "Enter your Password",
-                labelStyle: TextStyle(color: Colors.white),
-              ),
-              validator: validatePassword,
-            ),
-          ),
-          GestureDetector(
-            onTap: widget.type
-                ? () {
-                    AuthRepository().signUp(
-                        email: _emailController.text,
-                        password: _passwordController.text);
-                  }
-                : () {
-                    log("Logged In");
-                  },
-            child: Container(
-              margin: const EdgeInsets.only(left: 35, right: 35, top: 25),
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.red[700]!,
-                    Colors.red[500]!,
-                    Colors.red[300]!,
-                    Colors.red[100]!
-                  ],
+    return Column(
+      children: [
+        Text(
+          "Or...",
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall!
+              .copyWith(color: Colors.white, fontSize: 18),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: _emailController,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: const InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    labelText: "Enter your Email",
+                    labelStyle: TextStyle(color: Colors.white),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: validateEmail,
                 ),
               ),
-              child: Center(
-                child: Text(
-                  widget.type ? "Sign Up" : "Sign In",
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: TextFormField(
+                  obscureText: true,
+                  controller: _passwordController,
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
                     color: Colors.white,
-                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: const InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white)),
+                    labelText: "Enter your Password",
+                    labelStyle: TextStyle(color: Colors.white),
+                  ),
+                  validator: validatePassword,
+                ),
+              ),
+              GestureDetector(
+                onTap: widget.type
+                    ? () {
+                        AuthRepository().signUp(
+                            email: _emailController.text,
+                            password: _passwordController.text);
+                      }
+                    : () async {
+                        UserCredential userCredential = await AuthRepository()
+                            .signIn(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                context: context)
+                            .whenComplete(() => Navigator.of(context)
+                                .pushReplacementNamed(HomePage.routeName));
+                        if (userCredential == true) {
+                          await authRepository.setLoginState(true);
+                        }
+                      },
+                child: Container(
+                  margin: const EdgeInsets.only(left: 35, right: 35, top: 25),
+                  height: 60,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.red[700]!,
+                        Colors.red[500]!,
+                        Colors.red[300]!,
+                        Colors.red[100]!
+                      ],
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      widget.type ? "Sign Up" : "Sign In",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-        ],
-      ),
+        ),
+        widget.type
+            ? Row(
+                children: [
+                  Text(
+                    "If You Already Have An Acoount",
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w300,
+                        ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      "Login",
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(SignInPage.routeName);
+                    },
+                  )
+                ],
+              )
+            : Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "If You Don't Have An Acoount",
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w300,
+                            ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        child: Text(
+                          "SignUp",
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pushNamed(SignUpPage.routeName);
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              ),
+      ],
     );
   }
 }
