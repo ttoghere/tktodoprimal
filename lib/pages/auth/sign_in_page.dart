@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:tktodoprimal/pages/auth/mobile_auth_page.dart';
 
 import 'package:tktodoprimal/pages/auth/sign_up_page.dart';
 
@@ -86,12 +87,13 @@ class _ActionButtonsState extends State<ActionButtons> {
         CustomSocialLoginButton(
           assetPath: "assets/phone.svg",
           title: "Continue with Phone",
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).pushNamed(MobileAuthPage.routeName);
+          },
         ),
         const SizedBox(
           height: 10,
         ),
-       
       ],
     );
   }

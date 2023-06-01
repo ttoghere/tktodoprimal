@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "708167307614-5u9pcvncksi9esvaebnjv2rejpvk9ehm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "site.tunckankilic.tktodoprimal",
+            "certificate_hash": "797ed72f498b72cfcf730e9678d721f3bef239dd"
+          }
+        },
+        {
           "client_id": "708167307614-i1kjavd8bqi8f1lqiq12boesp05hldac.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -47,4 +47,43 @@ class AuthRepository extends BaseAuthRepository {
     String? isLoggedIn = await storage.read(key: 'isLoggedIn');
     return isLoggedIn == 'true';
   }
+
+  @override
+  Future<void> verifyPhoneNumber(String phoneNumber, BuildContext context,
+      void Function(dynamic verificationId) setData) async {
+    verificationCompleted(PhoneAuthCredential phoneAuthCredential) async {
+      showSnackbar(context, "Verification Completed");
+    }
+
+    verificationFailed(FirebaseAuthException firebaseAuthException) {
+      showSnackbar(context, "Verification ${firebaseAuthException.toString()}");
+    }
+
+    codeSent(String verificationID, int? forceResendingToken) {
+      setData(verificationID);
+      showSnackbar(context, "Verification Code Sent To Your Phone Number");
+    }
+
+    codeAutoRetrievalTimeout(String verificationID) {
+      showSnackbar(context, "Time Out");
+    }
+
+    try {
+      await _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: verificationCompleted,
+        verificationFailed: verificationFailed,
+        codeSent: codeSent,
+        codeAutoRetrievalTimeout: codeAutoRetrievalTimeout,
+      );
+    } on FirebaseAuthException catch (err) {
+      showSnackbar(context, err.message.toString());
+    }
+  }
+
+  @override
+  void showSnackbar(BuildContext context, String text) {
+    final snackbar = SnackBar(content: Text(text));
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
 }
